@@ -76,13 +76,13 @@ const generateCardHeader = () => `
 const generateForm = () => `
   <form method="POST" id="encodeForm">
     <div class="form-section">
-      <div class="form-section-title">Share URLs</div>
+      <div class="form-section-title">分享链接</div>
       <textarea class="form-control" id="inputTextarea" name="input" required placeholder="vmess://abcd..." rows="3"></textarea>
     </div>
 
     <div class="form-check form-switch mb-3">
       <input class="form-check-input" type="checkbox" id="advancedToggle">
-      <label class="form-check-label" for="advancedToggle">Advanced Options</label>
+      <label class="form-check-label" for="advancedToggle">高级选项</label>
     </div>
 
     <div id="advancedOptions">
@@ -92,11 +92,11 @@ const generateForm = () => `
 
       <div class="form-section">
         <div class="form-section-title d-flex align-items-center">
-          Base Config Settings(Optional)
+          基础配置设置（可选）
           <span class="tooltip-icon ms-2">
             <i class="fas fa-question-circle"></i>
             <span class="tooltip-content">
-              This feature is experimental and may not work as expected. You can paste your own base config here. Go to <a href="https://github.com/7Sageer/sublink-worker/blob/main/docs/base-config.md" target="_blank">docs</a> for more information.
+              此功能仍在实验阶段，可能不会按预期工作。您可以在此粘贴自己的基础配置。更多信息请访问 <a href="https://github.com/7Sageer/sublink-worker/blob/main/docs/base-config.md" target="_blank">文档</a>。
             </span>
           </span>
         </div>
@@ -107,12 +107,12 @@ const generateForm = () => `
           </select>
         </div>
         <div class="mb-3">
-          <textarea class="form-control" id="configEditor" rows="3" placeholder="Paste your custom config here..."></textarea>
+          <textarea class="form-control" id="configEditor" rows="3" placeholder="在此粘贴您的自定义配置..."></textarea>
         </div>
         <div class="d-flex gap-2">
-          <button type="button" class="btn btn-secondary" onclick="saveConfig()">Save Config</button>
+          <button type="button" class="btn btn-secondary" onclick="saveConfig()">保存配置</button>
           <button type="button" class="btn btn-outline-danger" onclick="clearConfig()">
-            <i class="fas fa-trash-alt me-2"></i>Clear Config
+            <i class="fas fa-trash-alt me-2"></i>清除配置
           </button>
         </div>
       </div>
@@ -120,10 +120,10 @@ const generateForm = () => `
 
     <div class="d-flex gap-2 mt-4">
       <button type="submit" class="btn btn-primary flex-grow-1">
-        <i class="fas fa-sync-alt me-2"></i>Convert
+        <i class="fas fa-sync-alt me-2"></i>转换
       </button>
       <button type="button" class="btn btn-outline-secondary" id="clearFormBtn">
-        <i class="fas fa-trash-alt me-2"></i>Clear
+        <i class="fas fa-trash-alt me-2"></i>清除
       </button>
     </div>
   </form>
@@ -131,19 +131,19 @@ const generateForm = () => `
 
 const generateSubscribeLinks = (xrayUrl, singboxUrl, clashUrl, surgeUrl, baseUrl) => `
   <div class="mt-5">
-    ${generateLinkInput('Xray Link (Base64):', 'xrayLink', xrayUrl)}
-    ${generateLinkInput('SingBox Link:', 'singboxLink', singboxUrl)}
-    ${generateLinkInput('Clash Link:', 'clashLink', clashUrl)}
-    ${generateLinkInput('Surge Link:', 'surgeLink', surgeUrl)}
+    ${generateLinkInput('Xray 链接 (Base64):', 'xrayLink', xrayUrl)}
+    ${generateLinkInput('SingBox 链接:', 'singboxLink', singboxUrl)}
+    ${generateLinkInput('Clash 链接:', 'clashLink', clashUrl)}
+    ${generateLinkInput('Surge 链接:', 'surgeLink', surgeUrl)}
     <div class="mb-3">
-      <label for="customShortCode" class="form-label">Custom Path (Optional):</label>
+      <label for="customShortCode" class="form-label">自定义路径（可选）:</label>
       <div class="input-group flex-nowrap">
         <span class="input-group-text text-truncate" style="max-width: 400px;" title="${baseUrl}/s/">
           ${baseUrl}/s/
         </span>
-        <input type="text" class="form-control" id="customShortCode" placeholder="e.g. my-custom-link">
+        <input type="text" class="form-control" id="customShortCode" placeholder="例如：my-custom-link">
         <select id="savedCustomPaths" class="form-select" style="max-width: 200px;">
-          <option value="">Saved paths</option>
+          <option value="">已保存的路径</option>
         </select>
         <button class="btn btn-outline-danger" type="button" onclick="deleteSelectedPath()">
           <i class="fas fa-trash-alt"></i>
@@ -152,7 +152,7 @@ const generateSubscribeLinks = (xrayUrl, singboxUrl, clashUrl, surgeUrl, baseUrl
     </div>
     <div class="d-grid">
       <button class="btn btn-primary btn-lg" type="button" onclick="shortenAllUrls()">
-        <i class="fas fa-compress-alt me-2"></i>Shorten Links
+        <i class="fas fa-compress-alt me-2"></i>生成短链接
       </button>
     </div>
   </div>
@@ -207,7 +207,7 @@ const customPathFunctions = () => `
   function updateSavedPathsDropdown() {
     const savedPaths = JSON.parse(localStorage.getItem('savedCustomPaths') || '[]');
     const dropdown = document.getElementById('savedCustomPaths');
-    dropdown.innerHTML = '<option value="">Saved paths</option>';
+    dropdown.innerHTML = '<option value="">已保存的路径</option>';
     savedPaths.forEach(path => {
       const option = document.createElement('option');
       option.value = path;
@@ -282,7 +282,7 @@ const shortenAllUrlsFunction = () => `
       const data = await response.text();
       return data;
     }
-    throw new Error('Failed to shorten URL');
+    throw new Error('生成短链接失败');
   }
 
   async function shortenAllUrls() {
@@ -295,13 +295,13 @@ const shortenAllUrlsFunction = () => `
     try {
       isShortening = true;
       shortenButton.disabled = true;
-      shortenButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Shortening...';
+      shortenButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>生成中...';
 
       const singboxLink = document.getElementById('singboxLink');
       const customShortCode = document.getElementById('customShortCode').value;
 
       if (singboxLink.value.includes('/b/')) {
-        alert('Links are already shortened!');
+        alert('链接已经是短链接！');
         return;
       }
 
@@ -317,11 +317,11 @@ const shortenAllUrlsFunction = () => `
       surgeLink.value = window.location.origin + '/s/' + shortCode;
     } catch (error) {
       console.error('Error:', error);
-      alert('Failed to shorten URLs. Please try again.');
+      alert('生成短链接失败。请重试。');
     } finally {
       isShortening = false;
       shortenButton.disabled = false;
-      shortenButton.innerHTML = '<i class="fas fa-compress-alt me-2"></i>Shorten Links';
+      shortenButton.innerHTML = '<i class="fas fa-compress-alt me-2"></i>生成短链接';
     }
   }
 `;
@@ -362,21 +362,21 @@ const darkModeToggleFunction = () => `
 const generateRuleSetSelection = () => `
   <div class="container">
     <div class="header-container">
-      <h4 class="header-title">Rule Selection</h4>
+      <h4 class="header-title">规则选择</h4>
       <span class="tooltip-icon">
         <i class="fas fa-question-circle"></i>
         <span class="tooltip-content">
-          These rules determine how traffic is directed through different proxies or directly. If you're unsure, you can use a predefined rule set.
+          这些规则决定了流量如何通过不同的代理或直接连接。如果您不确定，可以使用预定义的规则集。
         </span>
       </span>
     </div>
 
     <div class="content-container mb-3">
       <select class="form-select" id="predefinedRules" onchange="applyPredefinedRules()">
-        <option value="custom">Custom</option>
-        <option value="minimal">Minimal</option>
-        <option value="balanced">Balanced</option>
-        <option value="comprehensive">Comprehensive</option>
+        <option value="custom">自定义</option>
+        <option value="minimal">最小</option>
+        <option value="balanced">平衡</option>
+        <option value="comprehensive">全面</option>
       </select>
     </div>
     <div class="row" id="ruleCheckboxes">
@@ -390,15 +390,15 @@ const generateRuleSetSelection = () => `
       `).join('')}
     </div>
     <div class="mt-4">
-      <h5>Custom Rules</h5>
+      <h5>自定义规则</h5>
       <div class="form-check form-switch mb-3">
         <input class="form-check-input" type="checkbox" id="crpinToggle">
-        <label class="form-check-label" for="crpinToggle">Pin Custom Rules</label>
+        <label class="form-check-label" for="crpinToggle">固定自定义规则</label>
       </div>
       <div id="customRules">
-      <!-- Custom rules will be dynamically added here -->
+      <!-- 自定义规则将在此动态添加 -->
     </div>
-    <button type="button" class="btn btn-secondary mt-2" onclick="addCustomRule()">Add Custom Rule</button>
+    <button type="button" class="btn btn-secondary mt-2" onclick="addCustomRule()">添加自定义规则</button>
   </div>
   </div>
 `;
@@ -625,52 +625,52 @@ const customRuleFunctions = `
     newRuleDiv.dataset.ruleId = customRuleCount++;
     newRuleDiv.innerHTML = \`
       <div class="mb-2">
-        <label class="form-label">Outbound Name*</label>
-        <input type="text" class="form-control mb-2" name="customRuleName[]" placeholder="Rule Name" required>
+        <label class="form-label">出站名称*</label>
+        <input type="text" class="form-control mb-2" name="customRuleName[]" placeholder="规则名称" required>
       </div>
       <div class="mb-2">
-        <label class="form-label">Geo-Site Rule Sets</label>
+        <label class="form-label">地理站点规则集</label>
         <span class="tooltip-icon">
           <i class="fas fa-question-circle"></i>
           <span class="tooltip-content">
-            Site Rules in SingBox comes from https://github.com/lyc8503/sing-box-rules, that means your custom rules must be in the repos
+            SingBox 中的站点规则来自 https://github.com/lyc8503/sing-box-rules，这意味着您的自定义规则必须在该仓库中
           </span>
         </span>
-        <input type="text" class="form-control" name="customRuleSite[]" placeholder="e.g., google,anthropic">
+        <input type="text" class="form-control" name="customRuleSite[]" placeholder="例如：google,anthropic">
       </div>
       <div class="mb-2">
-        <label class="form-label">Geo-IP Rule Sets</label>
+        <label class="form-label">地理 IP 规则集</label>
         <span class="tooltip-icon">
           <i class="fas fa-question-circle"></i>
           <span class="tooltip-content">
-            IP Rules in SingBox comes from https://github.com/lyc8503/sing-box-rules, that means your custom rules must be in the repos
+            SingBox 中的 IP 规则来自 https://github.com/lyc8503/sing-box-rules，这意味着您的自定义规则必须在该仓库中
           </span>
         </span>
-        <input type="text" class="form-control" name="customRuleIP[]" placeholder="e.g., private,cn">
+        <input type="text" class="form-control" name="customRuleIP[]" placeholder="例如：private,cn">
       </div>
       <div class="mb-2">
-        <label class="form-label">Domain Suffix</label>
-        <input type="text" class="form-control mb-2" name="customRuleDomainSuffix[]" placeholder="Domain Suffix (comma separated)">
+        <label class="form-label">域名后缀</label>
+        <input type="text" class="form-control mb-2" name="customRuleDomainSuffix[]" placeholder="域名后缀（用逗号分隔）">
       </div>
       <div class="mb-2">
-        <label class="form-label">Domain Keyword</label>
-        <input type="text" class="form-control mb-2" name="customRuleDomainKeyword[]" placeholder="Domain Keyword (comma separated)">
+        <label class="form-label">域名关键词</label>
+        <input type="text" class="form-control mb-2" name="customRuleDomainKeyword[]" placeholder="域名关键词（用逗号分隔）">
       </div>
       <div class="mb-2">
         <label class="form-label">IP CIDR</label>
-        <input type="text" class="form-control mb-2" name="customRuleIPCIDR[]" placeholder="IP CIDR (comma separated)">
+        <input type="text" class="form-control mb-2" name="customRuleIPCIDR[]" placeholder="IP CIDR（用逗号分隔）">
       </div>
       <div class="mb-2">
-        <label class="form-label">Protocol</label>
+        <label class="form-label">协议</label>
         <span class="tooltip-icon">
           <i class="fas fa-question-circle"></i>
           <span class="tooltip-content">
-            Protocol rules for specific traffic types. More details: https://sing-box.sagernet.org/configuration/route/sniff/
+            特定流量类型的协议规则。更多详情：https://sing-box.sagernet.org/configuration/route/sniff/
           </span>
         </span>
-        <input type="text" class="form-control mb-2" name="customRuleProtocol[]" placeholder="Protocol (comma separated, e.g, http,ssh,dns)">
+        <input type="text" class="form-control mb-2" name="customRuleProtocol[]" placeholder="协议（用逗号分隔，例如：http,ssh,dns）">
       </div>
-      <button type="button" class="btn btn-danger btn-sm" onclick="removeCustomRule(this)">Remove</button>
+      <button type="button" class="btn btn-danger btn-sm" onclick="removeCustomRule(this)">删除</button>
     \`;
     customRulesDiv.appendChild(newRuleDiv);
   }
@@ -692,7 +692,7 @@ const generateQRCodeFunction = () => `
     const input = document.getElementById(id);
     const text = input.value;
     if (!text) {
-      alert('No link provided!');
+      alert('没有提供链接！');
       return;
     }
     try {
@@ -710,8 +710,8 @@ const generateQRCodeFunction = () => `
       modal.className = 'qr-modal';
       modal.innerHTML = \`
         <div class="qr-card">
-          <img src="\${qrImage}" alt="QR Code">
-          <p>Scan QR Code</p>
+          <img src="\${qrImage}" alt="二维码">
+          <p>扫描二维码</p>
         </div>
       \`;
 
@@ -734,7 +734,7 @@ const generateQRCodeFunction = () => `
       });
     } catch (error) {
       console.error('Error in generating:', error);
-      alert('Try to use short links!');
+      alert('请尝试使用短链接！');
     }
   }
 
@@ -770,7 +770,7 @@ const saveConfig = () => `
     })
     .then(response => {
       if (!response.ok) {
-        throw new Error('Failed to save configuration');
+        throw new Error('保存配置失败');
       }
       return response.text();
     })
@@ -778,10 +778,10 @@ const saveConfig = () => `
       const currentUrl = new URL(window.location.href);
       currentUrl.searchParams.set('configId', configId);
       window.history.pushState({}, '', currentUrl);
-      alert('Configuration saved successfully!');
+      alert('配置保存成功！');
     })
     .catch(error => {
-      alert('Error: ' + error.message);
+      alert('错误：' + error.message);
     });
   }
 `;
